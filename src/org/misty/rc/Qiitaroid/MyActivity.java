@@ -24,7 +24,7 @@ public class MyActivity extends Activity {
         setContentView(R.layout.main);
 
 
-        qiita = new QiitaClient(user, password);
+        //qiita = new QiitaClient(user, password);
     }
 
 

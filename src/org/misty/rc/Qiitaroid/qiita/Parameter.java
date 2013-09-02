@@ -41,11 +41,14 @@ public class Parameter {
         return this.value;
     }
 
-    public static String encodeParameters(Parameter[] params) {
+    public static String encodeParameters(Parameter[] params, boolean flag) {
         if(null == params) {
             return "";
         } else {
             StringBuilder buf = new StringBuilder();
+            if(flag) {
+                buf.append("?");
+            }
             for(int i = 0; i < params.length; i++) {
                 if(i != 0) {
                     buf.append("&");
