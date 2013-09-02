@@ -44,6 +44,17 @@ public class QiitaClient {
         );
     }
 
+    private String generateURL(String... path) {
+        StringBuilder ret = new StringBuilder();
+
+        for(int i = 0; i < path.length; i++) {
+            ret.append("/");
+            ret.append(path[i]);
+        }
+
+        return ret.toString();
+    }
+
     //API
 
     public Response getRateLimit() {
@@ -51,7 +62,7 @@ public class QiitaClient {
     }
 
     public Response postToken(Parameter... params) {
-        return get(API_AUTH, params);
+        return post(API_AUTH, params);
     }
 
     /*    リクエストユーザーの情報取得
@@ -75,7 +86,7 @@ public class QiitaClient {
 
         なし*/
     public Response getUser(String username) {
-        return null;
+        return get(generateURL(API_USERS, username), null);
     }
 
 
@@ -89,7 +100,7 @@ public class QiitaClient {
         team_url_name (任意) String
         チームのサブドメイン部分 (https://○○○.qiita.com の"○○○")*/
     public Response getUserItems(String username, Parameter... params) {
-        return null;
+        return get(generateURL(API_USERS, username, "items"), params);
     }
 
     /*    特定ユーザーのストックした投稿取得
@@ -101,7 +112,7 @@ public class QiitaClient {
 
         なし*/
     public Response getUserStock(String username) {
-        return null;
+        return get(API_USERS + "/" + username + "/" + "stocks");
     }
 
     /*    特定ユーザーのフォローしているユーザー取得
@@ -302,16 +313,32 @@ public class QiitaClient {
     }
 
     public Response get(String url, Parameter[] params) {
-        request = new Request();
-        request.setMethod(RequestMethod.GET);
-        request.setUrl(url);
-        String p = Parameter.encodeParameters(params);
 
-        return null;
+        request = new Request(RequestMethod.GET, url, params);
+        try {
+            response = HttpClient.execute(request);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return response;
+    }
+
+    public Response post(String url) {
+
+        return post(url, null);
     }
 
     public Response post(String url, Parameter[] params) {
-        return null;
+
+        request = new Request(RequestMethod.POST, url, params);
+        try {
+            response = HttpClient.execute(request);
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return response;
     }
 
     public Response put(String url, Parameter[] params) {
