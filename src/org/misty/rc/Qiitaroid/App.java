@@ -15,6 +15,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        DeployGate.install(this);
+//        DeployGate.install(this);
+        DeployGate.install(this, null, true);
     }
 }
