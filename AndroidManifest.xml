@@ -6,6 +6,8 @@
 
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="17"/>
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
             android:name=".App"
             android:theme="@android:style/Theme.Holo.Light.DarkActionBar"

@@ -23,7 +23,7 @@ public class QiitaClient {
     private String password;
 
     private Request request;
-    private Response response;
+    private OldResponse oldResponse;
 
     private boolean isAuthorized() {
         return this.auth;
@@ -37,8 +37,12 @@ public class QiitaClient {
         initToken();
     }
 
+    public QiitaClient(String token) {
+        this.token = token;
+    }
+
     private void initToken() {
-        response = postToken(
+        oldResponse = postToken(
                 new Parameter(Parameter.URL_NAME, this.name),
                 new Parameter(Parameter.PASSWORD, this.password)
         );
@@ -57,11 +61,11 @@ public class QiitaClient {
 
     //API
 
-    public Response getRateLimit() {
+    public OldResponse getRateLimit() {
         return get(API_LIMIT, null);
     }
 
-    public Response postToken(Parameter... params) {
+    public OldResponse postToken(Parameter... params) {
         return post(API_AUTH, params);
     }
 
@@ -73,7 +77,7 @@ public class QiitaClient {
                 input
 
         なし*/
-    public Response getUser() {
+    public OldResponse getUser() {
         return null;
     }
 
@@ -85,7 +89,7 @@ public class QiitaClient {
                 input
 
         なし*/
-    public Response getUser(String username) {
+    public OldResponse getUser(String username) {
         return get(generateURL(API_USERS, username), null);
     }
 
@@ -99,7 +103,7 @@ public class QiitaClient {
 
         team_url_name (任意) String
         チームのサブドメイン部分 (https://○○○.qiita.com の"○○○")*/
-    public Response getUserItems(String username, Parameter... params) {
+    public OldResponse getUserItems(String username, Parameter... params) {
         return get(generateURL(API_USERS, username, "items"), params);
     }
 
@@ -111,7 +115,7 @@ public class QiitaClient {
                 input
 
         なし*/
-    public Response getUserStock(String username) {
+    public OldResponse getUserStock(String username) {
         return get(API_USERS + "/" + username + "/" + "stocks");
     }
 
@@ -123,7 +127,7 @@ public class QiitaClient {
                 input
 
         なし*/
-    public Response getUserFollowingUser(String username) {
+    public OldResponse getUserFollowingUser(String username) {
         return null;
     }
 
@@ -135,7 +139,7 @@ public class QiitaClient {
                 input
 
         なし*/
-    public Response getUserFollowingTags(String username) {
+    public OldResponse getUserFollowingTags(String username) {
         return null;
     }
 
@@ -148,7 +152,7 @@ public class QiitaClient {
         input
 
                 なし*/
-    public Response getTagsUserItems(String username) {
+    public OldResponse getTagsUserItems(String username) {
         return null;
     }
 
@@ -160,7 +164,7 @@ public class QiitaClient {
                 input
 
         なし*/
-    public Response getTags() {
+    public OldResponse getTags() {
         return null;
     }
 
@@ -176,7 +180,7 @@ public class QiitaClient {
         複数クエリを投げる場合はクエリ同士を' '(半角スペース)で繋ぐ．例: 'ruby emacs'
         stocked (任意) Bool
         認証しているときのみ有効．自分がストックしている投稿から検索する*/
-    public Response getSerach(Parameter... params) {
+    public OldResponse getSerach(Parameter... params) {
         return null;
     }
 
@@ -191,7 +195,7 @@ public class QiitaClient {
                 input
 
         なし*/
-    public Response getItems() {
+    public OldResponse getItems() {
         return null;
     }
 
@@ -203,7 +207,7 @@ public class QiitaClient {
                 input
 
         なし*/
-    public Response getStocks() {
+    public OldResponse getStocks() {
         return null;
     }
 
@@ -233,7 +237,7 @@ public class QiitaClient {
         team_url_name (任意) String
         チームのサブドメイン部分 (https://○○○.qiita.com の"○○○")
                 自分の所属するチームに投稿する*/
-    public Response postItems(Parameter... params) {
+    public OldResponse postItems(Parameter... params) {
         return null;
     }
 
@@ -252,7 +256,7 @@ public class QiitaClient {
                      限定公開のものをpublicに変更のみ可能(falseのみ指定可能)
         team_url_name (チーム内投稿を編集する時のみ必須)
         チームのサブドメイン部分 (https://○○○.qiita.com の"○○○")*/
-    public Response putItemsUuid(String uuid, Parameter... params) {
+    public OldResponse putItemsUuid(String uuid, Parameter... params) {
         return null;
     }
 
@@ -264,7 +268,7 @@ public class QiitaClient {
                 input
 
         なし*/
-    public Response deleteItemsUuid(String uuid) {
+    public OldResponse deleteItemsUuid(String uuid) {
         return null;
     }
 
@@ -278,7 +282,7 @@ public class QiitaClient {
 
         team_url_name (任意) String
         チームのサブドメイン部分 (https://○○○.qiita.com の"○○○")*/
-    public Response getItemsUuid(String uuid, Parameter... params) {
+    public OldResponse getItemsUuid(String uuid, Parameter... params) {
         return null;
     }
 
@@ -290,7 +294,7 @@ public class QiitaClient {
                 input
 
         なし*/
-    public Response putItemsStock(String uuid) {
+    public OldResponse putItemsStock(String uuid) {
         return null;
     }
 
@@ -302,50 +306,50 @@ public class QiitaClient {
                 input
 
         なし*/
-    public Response deleteItemsStock(String uuid) {
+    public OldResponse deleteItemsStock(String uuid) {
         return null;
     }
 
     // inner method
-    public Response get(String url) {
+    public OldResponse get(String url) {
 
         return get(url, null);
     }
 
-    public Response get(String url, Parameter[] params) {
+    public OldResponse get(String url, Parameter[] params) {
 
-        request = new Request(RequestMethod.GET, url, params);
         try {
-            response = HttpClient.execute(request);
+            request = new Request(RequestMethod.GET, url, params);
+            oldResponse = HttpClient.execute(request);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        return response;
+        return oldResponse;
     }
 
-    public Response post(String url) {
+    public OldResponse post(String url) {
 
         return post(url, null);
     }
 
-    public Response post(String url, Parameter[] params) {
+    public OldResponse post(String url, Parameter[] params) {
 
-        request = new Request(RequestMethod.POST, url, params);
         try {
-            response = HttpClient.execute(request);
+            request = new Request(RequestMethod.POST, url, params);
+            oldResponse = HttpClient.execute(request);
         } catch(Exception ex) {
             ex.printStackTrace();
         }
 
-        return response;
+        return oldResponse;
     }
 
-    public Response put(String url, Parameter[] params) {
+    public OldResponse put(String url, Parameter[] params) {
         return null;
     }
 
-    public Response delete(String url, Parameter[] params) {
+    public OldResponse delete(String url, Parameter[] params) {
         return null;
     }
 

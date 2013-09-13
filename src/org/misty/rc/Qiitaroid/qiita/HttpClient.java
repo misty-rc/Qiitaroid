@@ -1,11 +1,14 @@
 package org.misty.rc.Qiitaroid.qiita;
 
+import android.util.Log;
+import com.deploygate.sdk.DeployGate;
+import org.misty.rc.Qiitaroid.Ref;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +19,7 @@ import java.net.URL;
  */
 public class HttpClient {
 
-    public static Response execute(Request request) throws Exception{
+    public static OldResponse execute(Request request) throws Exception{
         String val;
 
         switch (request.method()) {
@@ -43,6 +46,10 @@ public class HttpClient {
                 while((tmp = reader.readLine()) != null) {
                     buf.append(tmp);
                 }
+
+                //parse json
+                Log.d(Ref.TAG, buf.toString());
+                DeployGate.logDebug(buf.toString());
 
                 break;
             case PUT:
